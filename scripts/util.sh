@@ -6,6 +6,7 @@ NETWORK_ID=$(cat $GENESIS_TEMPLATE_FILE | jq '.config.chainId')
 BOOT_KEY_FILE=$ROOT/boot.key
 BOOT_LOG_FILE=$ROOT/bootnode.log
 GENESIS_FILE=$ROOT/genesis.json
+SIGNER_EL_DATADIR=$ROOT/signer/ethereum
 
 BASE_GETH_PORT=21000
 BASE_GETH_RPC_PORT=8600

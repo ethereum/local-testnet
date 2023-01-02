@@ -8,20 +8,36 @@ mkdir $ROOT
 # Generate a dummy password for accounts
 echo "none" > $ROOT/password
 
-genesis=$(cat $GENESIS_TEMPLATE_FILE)
-for (( node=1; node<=$NODE_COUNT; node++ )); do
-    el_data_dir $node
-    datadir=$el_data_dir
+new_account() {
+    local node=$1
+    local datadir=$2
 
     # Generate a new account for each geth node
     address=$(geth --datadir $datadir account new --password $ROOT/password 2>/dev/null | grep -o "0x[0-9a-fA-F]*")
-    echo "Generated an account with address $address for geth node #$node and saved it at $datadir"
+    echo "Generated an account with address $address for geth node $node and saved it at $datadir"
     echo $address > $datadir/address
 
     # Add the account into the genesis state
     alloc=$(echo $genesis | jq ".alloc + { \"${address:2}\": { \"balance\": \"300000\" } }")
     genesis=$(echo $genesis | jq ". + { \"alloc\": $alloc }")
+}
+
+genesis=$(cat $GENESIS_TEMPLATE_FILE)
+for (( node=1; node<=$NODE_COUNT; node++ )); do
+    el_data_dir $node
+    new_account "#$node" $el_data_dir
 done
+
+new_account "'signer'" $SIGNER_EL_DATADIR
+
+zeroes() {
+    for i in $(seq $1); do
+        echo -n "0"
+    done
+}
+address=$(cat $SIGNER_EL_DATADIR/address)
+extra_data="0x$(zeroes 64)${address:2}$(zeroes 130)"
+genesis=$(echo $genesis | jq ". + { \"extradata\": \"$extra_data\" }")
 
 # Generate the genesis state
 echo $genesis > $GENESIS_FILE
@@ -35,6 +51,9 @@ for (( node=1; node<=$NODE_COUNT; node++ )); do
     geth init --datadir $datadir $GENESIS_FILE 2>/dev/null
     echo "Initialized the data directory $datadir with $GENESIS_FILE"
 done
+
+geth init --datadir $SIGNER_EL_DATADIR $GENESIS_FILE 2>/dev/null
+echo "Initialized the data directory $SIGNER_EL_DATADIR with $GENESIS_FILE"
 
 # Generate the boot node key
 bootnode -genkey $BOOT_KEY_FILE

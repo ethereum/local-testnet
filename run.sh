@@ -57,4 +57,6 @@ for (( node=1; node<=$NODE_COUNT; node++ )); do
     ./scripts/el-node.sh $node $boot_enode &
 done
 
+./scripts/signer-node.sh $SIGNER_EL_DATADIR $boot_enode
+
 wait -n
