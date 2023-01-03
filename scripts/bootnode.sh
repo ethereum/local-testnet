@@ -18,6 +18,6 @@ bootnode \
     < /dev/null > $BOOT_LOG_FILE 2>&1
 
 if test $? -ne 0; then
-    node_error "The bootnode returns an error. Please look at $BOOT_LOG_FILE for more detail."
+    node_error "The bootnode returns an error. The last 10 lines of the log file is shown below.\n\n$(tail -n 10 $BOOT_LOG_FILE)"
     exit 1
 fi

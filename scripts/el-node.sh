@@ -19,7 +19,7 @@ port=$(expr $BASE_GETH_PORT + $index)
 rpc_port=$(expr $BASE_GETH_RPC_PORT + $index)
 log_file=$datadir/geth.log
 
-echo "Started the geth node #$index which is now listening at port $port"
+echo "Started the geth node #$index which is now listening at port $port. You can see the log at $log_file"
 geth \
     --datadir $datadir \
     --authrpc.port $rpc_port \
@@ -31,6 +31,6 @@ geth \
     > $log_file 2>&1
 
 if test $? -ne 0; then
-    node_error "The geth node #$index returns an error. Please look at $log_file more detail."
+    node_error "The geth node #$index returns an error. The last 10 lines of the log file is shown below.\n\n$(tail -n 10 $log_file)"
     exit 1
 fi

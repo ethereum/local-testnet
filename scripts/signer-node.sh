@@ -13,15 +13,13 @@ datadir=$1
 boot_enode=$2
 
 address=$(cat $datadir/address)
-port=3011
-rpc_port=3012
 log_file=$datadir/geth.log
 
-echo "Started the geth node 'signer' which is now listening at port $port"
+echo "Started the geth node 'signer' which is now listening at port $SIGNER_PORT. You can see the log at $log_file"
 geth \
     --datadir $datadir \
-    --authrpc.port $rpc_port \
-    --port $port \
+    --authrpc.port $SIGNER_RPC_PORT \
+    --port $SIGNER_PORT \
     --bootnodes $boot_enode \
     --networkid $NETWORK_ID \
     --unlock $address \
@@ -30,6 +28,6 @@ geth \
     > $log_file 2>&1
 
 if test $? -ne 0; then
-    node_error "The geth node 'signer' returns an error. Please look at $log_file more detail."
+    node_error "The geth node 'signer' returns an error. The last 10 lines of the log file is shown below.\n\n$(tail -n 10 $log_file)"
     exit 1
 fi

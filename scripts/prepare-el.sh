@@ -18,7 +18,7 @@ new_account() {
     echo $address > $datadir/address
 
     # Add the account into the genesis state
-    alloc=$(echo $genesis | jq ".alloc + { \"${address:2}\": { \"balance\": \"300000\" } }")
+    alloc=$(echo $genesis | jq ".alloc + { \"${address:2}\": { \"balance\": \"$INITIAL_BALANCE\" } }")
     genesis=$(echo $genesis | jq ". + { \"alloc\": $alloc }")
 }
 
@@ -30,6 +30,7 @@ done
 
 new_account "'signer'" $SIGNER_EL_DATADIR
 
+# Add the extradata
 zeroes() {
     for i in $(seq $1); do
         echo -n "0"
@@ -38,6 +39,10 @@ zeroes() {
 address=$(cat $SIGNER_EL_DATADIR/address)
 extra_data="0x$(zeroes 64)${address:2}$(zeroes 130)"
 genesis=$(echo $genesis | jq ". + { \"extradata\": \"$extra_data\" }")
+
+# Add the terminal total difficulty
+config=$(echo $genesis | jq ".config + { \"chainId\": "$NETWORK_ID", \"terminalTotalDifficulty\": "$TERMINAL_TOTAL_DIFFICULTY" }")
+genesis=$(echo $genesis | jq ". + { \"config\": $config }")
 
 # Generate the genesis state
 echo $genesis > $GENESIS_FILE

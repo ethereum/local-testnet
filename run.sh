@@ -5,7 +5,7 @@ set -u +e
 
 check_cmd() {
     if ! command -v $1 >/dev/null; then
-        echo -e "\nCommand '$1' not found, please install it first.\n\nSee $2 for more detail.\n"
+        echo -e "\nCommand '$1' not found, please install it first.\n\n$2\n"
         exit 1
     fi
 }
@@ -15,8 +15,11 @@ if test -e $ROOT; then
     exit 1
 fi
 
-check_cmd geth "https://geth.ethereum.org/docs/getting-started/installing-geth"
-check_cmd bootnode "https://geth.ethereum.org/docs/getting-started/installing-geth"
+check_cmd geth "See https://geth.ethereum.org/docs/getting-started/installing-geth for more detail."
+check_cmd bootnode "See https://geth.ethereum.org/docs/getting-started/installing-geth for more detail."
+check_cmd lighthouse "See https://lighthouse-book.sigmaprime.io/installation-source.html and run \"FEATURES=spec minimal make\"."
+check_cmd npm "See https://nodejs.org/en/download/ for more detail."
+check_cmd node "See https://nodejs.org/en/download/ for more detail."
 
 cleanup() {
     echo "Shutting down"
@@ -34,8 +37,8 @@ cleanup() {
 
 trap cleanup EXIT
 
-if ! ./scripts/prepare.sh; then
-    echo -e "\n*Failed!* in the preparation step\n"
+if ! ./scripts/prepare-el.sh; then
+    echo -e "\n*Failed!* in the execution layer preparation step\n"
     exit 1
 fi
 ./scripts/bootnode.sh &
@@ -57,6 +60,16 @@ for (( node=1; node<=$NODE_COUNT; node++ )); do
     ./scripts/el-node.sh $node $boot_enode &
 done
 
-./scripts/signer-node.sh $SIGNER_EL_DATADIR $boot_enode
+./scripts/signer-node.sh $SIGNER_EL_DATADIR $boot_enode &
+
+# Wait until the signer node starts the IPC socket
+while ! test -S $SIGNER_EL_DATADIR/geth.ipc; do
+    sleep 1
+done
+
+if ! ./scripts/prepare-cl.sh; then
+    echo -e "\n*Failed!* in the consensus layer preparation step\n"
+    exit 1
+fi
 
 wait -n
