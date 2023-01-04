@@ -6,7 +6,7 @@ set -eu
 mkdir $ROOT
 
 # Generate a dummy password for accounts
-echo "none" > $ROOT/password
+echo "itsjustnothing" > $ROOT/password
 
 new_account() {
     local node=$1
