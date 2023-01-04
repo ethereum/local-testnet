@@ -3,6 +3,9 @@
 source ./scripts/util.sh
 set -eu
 
+mkdir -p $ROOT
+mkdir -p $BUILD_DIR
+
 if ! test -e ./web3/node_modules; then
     echo "The package ./web3 doesn't have node modules installed yet. Installing the node modules now"
     npm --prefix ./web3 install >/dev/null 2>/dev/null
@@ -17,10 +20,10 @@ block_number=$(echo "$output" | grep "block_number" | cut -d ' ' -f 2)
 
 echo "Deployed the deposit contract of the address $address in the transaction $transaction on the block number $block_number"
 
+echo $address > $ROOT/deposit-address
+
 if ! test -e $BUILD_DIR/deposit; then
     echo "$BUILD_DIR/deposit not found. Downloading it from https://github.com/ethereum/staking-deposit-cli"
-
-    mkdir -p $BUILD_DIR
 
     curl -s -L -o $ROOT/deposit.tar.gz "https://github.com/ethereum/staking-deposit-cli/releases/download/v2.3.0/staking_deposit-cli-76ed782-linux-amd64.tar.gz"
     tar xf $ROOT/deposit.tar.gz -C $ROOT
@@ -55,3 +58,16 @@ if test $validator_count -lt $VALIDATOR_COUNT; then
 
     echo "Done generating the credentials"
 fi
+
+# Select the validator
+npm --prefix ./web3 exec select-validators -- \
+    -c $VALIDATOR_COUNT \
+    -f $(find $BUILD_DIR/validator_keys -name "deposit_data*.json") \
+    > $ROOT/deposit-data.json
+
+echo "Sending the deposits to the deposit contract"
+npm --prefix ./web3 exec transfer-deposit -- \
+    --endpoint $SIGNER_EL_DATADIR/geth.ipc \
+    --deposit-address $address \
+    -f $ROOT/deposit-data.json
+echo -e "\nDone sending all the deposits to the contract"

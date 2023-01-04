@@ -25,7 +25,7 @@ geth \
     --unlock $address \
     --password $ROOT/password \
     --mine \
-    > $log_file 2>&1
+    < /dev/null > $log_file 2>&1
 
 if test $? -ne 0; then
     node_error "The geth node 'signer' returns an error. The last 10 lines of the log file is shown below.\n\n$(tail -n 10 $log_file)"
