@@ -19,15 +19,13 @@ const argv = yargs
     const web3 = new Web3(argv.endpoint, net);
     const accounts = await web3.eth.getAccounts();
 
-    // The contract is different from the one in the mainnet.
-    // Please see "https://etherscan.io/tx/0xe75fb554e433e03763a1560646ee22dcb74e5274b34c5ad644e7c0f619a7e1d0".
-    // The current one is "v0.12.1". Look at https://github.com/ethereum/consensus-specs/tree/v0.12.1
-    const jsonInterface = JSON.parse(fs.readFileSync('./deposit-contract.json'));
-    const bytecode = JSON.parse(fs.readFileSync('./deposit-contract.bytecode'));
-    const undeployed = new web3.eth.Contract(jsonInterface);
+    // The transaction in the mainnet is at
+    // https://etherscan.io/tx/0xe75fb554e433e03763a1560646ee22dcb74e5274b34c5ad644e7c0f619a7e1d0
+    const json = JSON.parse(fs.readFileSync('./deposit-contract.json'));
+    const undeployed = new web3.eth.Contract(json.abi);
     // The real gasLimit is 3,141,592 and the real gasPrice is 147 Gwei
     const contract = await undeployed
-        .deploy({ data: bytecode })
+        .deploy({ data: json.bytecode })
         .send({
             from: accounts[0],
             nonce: 0,
