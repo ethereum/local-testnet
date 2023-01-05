@@ -15,8 +15,8 @@ boot_enode=$2
 el_data_dir $index
 datadir=$el_data_dir
 address=$(cat $datadir/address)
-port=$(expr $BASE_GETH_PORT + $index)
-rpc_port=$(expr $BASE_GETH_RPC_PORT + $index)
+port=$(expr $BASE_EL_PORT + $index)
+rpc_port=$(expr $BASE_EL_RPC_PORT + $index)
 log_file=$datadir/geth.log
 
 echo "Started the geth node #$index which is now listening at port $port. You can see the log at $log_file"

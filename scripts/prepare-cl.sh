@@ -93,3 +93,15 @@ lcli eth1-genesis \
     --testnet-dir $CONSENSUS_DIR 2>/dev/null
 
 echo "Generated $CONSENSUS_DIR/genesis.ssz"
+
+lcli \
+	generate-bootnode-enr \
+	--ip 127.0.0.1 \
+	--udp-port $CL_BOOTNODE_PORT \
+	--tcp-port $CL_BOOTNODE_PORT \
+	--genesis-fork-version $GENESIS_FORK_VERSION \
+	--output-dir $CL_BOOTNODE_DIR
+
+bootnode_enr=$(cat $CL_BOOTNODE_DIR/enr.dat)
+echo "- $bootnode_enr" > $CONSENSUS_DIR/boot_enr.yaml
+echo "Generated $CONSENSUS_DIR/boot_enr.yaml"

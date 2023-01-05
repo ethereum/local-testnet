@@ -46,7 +46,7 @@ if ! ./scripts/prepare-el.sh; then
     echo -e "\n*Failed!* in the execution layer preparation step\n"
     exit 1
 fi
-./scripts/bootnode.sh &
+./scripts/el-bootnode.sh &
 bootnode_pid=$!
 
 # Keep reading until we can parse the boot enode
@@ -54,7 +54,7 @@ while true; do
     if ! ps p $bootnode_pid >/dev/null; then
         exit 1
     fi
-    boot_enode="$(cat $BOOT_LOG_FILE 2>/dev/null | grep -o "enode:.*$" || true)"
+    boot_enode="$(cat $EL_BOOT_LOG_FILE 2>/dev/null | grep -o "enode:.*$" || true)"
     if ! test -z "$boot_enode"; then
         break
     fi
@@ -76,5 +76,6 @@ if ! ./scripts/prepare-cl.sh; then
     echo -e "\n*Failed!* in the consensus layer preparation step\n"
     exit 1
 fi
+./scripts/cl-bootnode.sh &
 
 wait -n
