@@ -21,7 +21,7 @@ const argv = yargs
 
     // The transaction in the mainnet is at
     // https://etherscan.io/tx/0xe75fb554e433e03763a1560646ee22dcb74e5274b34c5ad644e7c0f619a7e1d0
-    const json = JSON.parse(fs.readFileSync('./deposit-contract.json'));
+    const json = JSON.parse(fs.readFileSync('./assets/deposit-contract.json'));
     const undeployed = new web3.eth.Contract(json.abi);
     // The real gasLimit is 3,141,592 and the real gasPrice is 147 Gwei
     const contract = await undeployed

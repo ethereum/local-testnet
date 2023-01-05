@@ -3,7 +3,7 @@
 source ./scripts/util.sh
 set -eu
 
-mkdir -p $ROOT
+mkdir -p $EXECUTION_DIR
 
 # Generate a dummy password for accounts
 echo "itsjustnothing" > $ROOT/password

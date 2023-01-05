@@ -20,6 +20,9 @@ geth \
     --datadir $datadir \
     --authrpc.port $SIGNER_RPC_PORT \
     --port $SIGNER_PORT \
+    --http \
+    --http.port $SIGNER_HTTP_PORT \
+    --allow-insecure-unlock \
     --bootnodes $boot_enode \
     --networkid $NETWORK_ID \
     --unlock $address \

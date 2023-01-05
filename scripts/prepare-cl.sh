@@ -3,7 +3,7 @@
 source ./scripts/util.sh
 set -eu
 
-mkdir -p $ROOT
+mkdir -p $CONSENSUS_DIR
 mkdir -p $BUILD_DIR
 
 if ! test -e ./web3/node_modules; then
@@ -21,6 +21,7 @@ block_number=$(echo "$output" | grep "block_number" | cut -d ' ' -f 2)
 echo "Deployed the deposit contract of the address $address in the transaction $transaction on the block number $block_number"
 
 echo $address > $ROOT/deposit-address
+echo $block_number > $CONSENSUS_DIR/deploy_block.txt
 
 if ! test -e $BUILD_DIR/deposit; then
     echo "$BUILD_DIR/deposit not found. Downloading it from https://github.com/ethereum/staking-deposit-cli"
@@ -71,3 +72,24 @@ npm --prefix ./web3 exec transfer-deposit -- \
     --deposit-address $address \
     -f $ROOT/deposit-data.json
 echo -e "\nDone sending all the deposits to the contract"
+
+cp $CONFIG_TEMPLATE_FILE $CONFIG_FILE
+echo "PRESET_BASE: \"$PRESET_BASE\"" >> $CONFIG_FILE
+echo "TERMINAL_TOTAL_DIFFICULTY: \"$TERMINAL_TOTAL_DIFFICULTY\"" >> $CONFIG_FILE
+echo "MIN_GENESIS_ACTIVE_VALIDATOR_COUNT: \"$VALIDATOR_COUNT\"" >> $CONFIG_FILE
+echo "MIN_GENESIS_TIME: \"$(expr $(date +%s) + $GENESIS_DELAY)\"" >> $CONFIG_FILE
+echo "GENESIS_DELAY: \"$GENESIS_DELAY\"" >> $CONFIG_FILE
+echo "GENESIS_FORK_VERSION: \"$GENESIS_FORK_VERSION\"" >> $CONFIG_FILE
+
+echo "DEPOSIT_CHAIN_ID: \"$NETWORK_ID\"" >> $CONFIG_FILE
+echo "DEPOSIT_NETWORK_ID: \"$NETWORK_ID\"" >> $CONFIG_FILE
+echo "DEPOSIT_CONTRACT_ADDRESS: \"$address\"" >> $CONFIG_FILE
+
+echo "Generated $CONFIG_FILE"
+
+lcli eth1-genesis \
+    --spec $PRESET_BASE \
+    --eth1-endpoints http://localhost:$SIGNER_HTTP_PORT \
+    --testnet-dir $CONSENSUS_DIR 2>/dev/null
+
+echo "Generated $CONSENSUS_DIR/genesis.ssz"

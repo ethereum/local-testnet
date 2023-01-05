@@ -32,7 +32,7 @@ const argv = yargs
     const web3 = new Web3(argv.endpoint, net);
     const accounts = await web3.eth.getAccounts();
 
-    const json = JSON.parse(fs.readFileSync('./deposit-contract.json'));
+    const json = JSON.parse(fs.readFileSync('./assets/deposit-contract.json'));
     const data = JSON.parse(fs.readFileSync(argv.file));
 
     const contract = new web3.eth.Contract(json.abi, argv.depositAddress);
