@@ -61,9 +61,12 @@ if test $validator_count -lt $VALIDATOR_COUNT; then
 fi
 
 # Select the validator
-npm --prefix ./web3 exec select-validators -- \
-    -c $VALIDATOR_COUNT \
-    -f $(find $BUILD_DIR/validator_keys -name "deposit_data*.json") \
+mkdir -p $CONSENSUS_DIR/validator_keys
+npm --prefix ./web3 exec distribute-validators -- \
+    --nc $NODE_COUNT \
+    --vc $VALIDATOR_COUNT \
+    -d $BUILD_DIR/validator_keys \
+    -o $CONSENSUS_DIR/validator_keys \
     > $ROOT/deposit-data.json
 
 echo "Sending the deposits to the deposit contract"
@@ -105,3 +108,17 @@ lcli \
 bootnode_enr=$(cat $CL_BOOTNODE_DIR/enr.dat)
 echo "- $bootnode_enr" > $CONSENSUS_DIR/boot_enr.yaml
 echo "Generated $CONSENSUS_DIR/boot_enr.yaml"
+
+echo "Importing the keystores of the validators to the lighthouse data directories"
+for (( node=1; node<=$NODE_COUNT; node++ )); do
+    cl_data_dir $node
+    lighthouse \
+        --testnet-dir $CONSENSUS_DIR \
+        account validator import \
+        --directory $CONSENSUS_DIR/validator_keys/node$node \
+        --datadir $cl_data_dir \
+        --password-file $ROOT/password \
+        --reuse-password 2>/dev/null
+    echo -n "."
+done
+echo -e "\nDone importing the keystores"
