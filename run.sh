@@ -21,7 +21,7 @@ fi
 
 check_cmd geth "See https://geth.ethereum.org/docs/getting-started/installing-geth for more detail."
 check_cmd bootnode "See https://geth.ethereum.org/docs/getting-started/installing-geth for more detail."
-check_cmd lighthouse "See https://lighthouse-book.sigmaprime.io/installation-source.html and run \"FEATURES=spec-minimal make\"."
+check_cmd lighthouse "See https://lighthouse-book.sigmaprime.io/installation.html for more detail."
 check_cmd lcli "See https://lighthouse-book.sigmaprime.io/installation-source.html and run \"make install-lcli\"."
 check_cmd npm "See https://nodejs.org/en/download/ for more detail."
 check_cmd node "See https://nodejs.org/en/download/ for more detail."
@@ -29,12 +29,12 @@ check_cmd node "See https://nodejs.org/en/download/ for more detail."
 cleanup() {
     echo "Shutting down"
     pids=$(jobs -p)
-    kill $pids 2>/dev/null
     while ps p $pids >/dev/null 2>/dev/null; do
+        kill $pids 2>/dev/null
         sleep 1
     done
     while test -e $ROOT; do
-        rm -rf $ROOT
+        rm -rf $ROOT 2>/dev/null
         sleep 1
     done
     echo "Deleted the data directory"
@@ -77,5 +77,10 @@ if ! ./scripts/prepare-cl.sh; then
     exit 1
 fi
 ./scripts/cl-bootnode.sh &
+
+for (( node=1; node<=$NODE_COUNT; node++ )); do
+    ./scripts/cl-bn-node.sh $node &
+    ./scripts/cl-vc-node.sh $node &
+done
 
 wait -n

@@ -112,6 +112,9 @@ echo "Generated $CONSENSUS_DIR/boot_enr.yaml"
 echo "Importing the keystores of the validators to the lighthouse data directories"
 for (( node=1; node<=$NODE_COUNT; node++ )); do
     cl_data_dir $node
+    el_data_dir $node
+    mkdir -p $cl_data_dir
+    cp $el_data_dir/geth/jwtsecret $cl_data_dir
     lighthouse \
         --testnet-dir $CONSENSUS_DIR \
         account validator import \
