@@ -13,7 +13,7 @@ if ! test -e ./web3/node_modules; then
 fi
 
 # Use the signing node as a node to deploy the deposit contract
-output=$(npm --prefix ./web3 exec deploy-deposit-contract -- --endpoint $SIGNER_EL_DATADIR/geth.ipc)
+output=$(NODE_PATH=./web3/node_modules node ./web3/src/deploy-deposit-contract.js --endpoint $SIGNER_EL_DATADIR/geth.ipc)
 address=$(echo "$output" | grep "address" | cut -d ' ' -f 2)
 transaction=$(echo "$output" | grep "transaction" | cut -d ' ' -f 2)
 block_number=$(echo "$output" | grep "block_number" | cut -d ' ' -f 2)
@@ -62,7 +62,7 @@ fi
 
 # Select the validator
 mkdir -p $CONSENSUS_DIR/validator_keys
-npm --prefix ./web3 exec distribute-validators -- \
+NODE_PATH=./web3/node_modules node ./web3/src/distribute-validators.js \
     --nc $NODE_COUNT \
     --vc $VALIDATOR_COUNT \
     -d $BUILD_DIR/validator_keys \
@@ -70,7 +70,7 @@ npm --prefix ./web3 exec distribute-validators -- \
     > $ROOT/deposit-data.json
 
 echo "Sending the deposits to the deposit contract"
-npm --prefix ./web3 exec transfer-deposit -- \
+NODE_PATH=./web3/node_modules node ./web3/src/transfer-deposit.js \
     --endpoint $SIGNER_EL_DATADIR/geth.ipc \
     --deposit-address $address \
     -f $ROOT/deposit-data.json
