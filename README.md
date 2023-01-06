@@ -29,10 +29,15 @@ make install-lcli
 
 # Install Node.js
 sudo apt install nodejs npm
+
+# Install jq
+sudo apt install -y jq
 ```
 
 ## Run the network
 ```bash
+git clone https://github.com/ppopth/local-testnet.git
+cd local-testnet
 ./run.sh
 ```
 By default, the number of nodes will be 4 and the number of validators will be 80. You can change them by setting the environment variables.

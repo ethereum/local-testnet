@@ -5,9 +5,6 @@ set -eu
 
 mkdir -p $EXECUTION_DIR
 
-# Generate a dummy password for accounts
-echo "itsjustnothing" > $ROOT/password
-
 new_account() {
     local node=$1
     local datadir=$2
