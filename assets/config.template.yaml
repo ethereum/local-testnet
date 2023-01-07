@@ -10,8 +10,8 @@ ALTAIR_FORK_EPOCH: "1"
 BELLATRIX_FORK_VERSION: "0x02000001"
 BELLATRIX_FORK_EPOCH: "2"
 
-SECONDS_PER_SLOT: "3"
-SECONDS_PER_ETH1_BLOCK: "3"
+# SECONDS_PER_SLOT:
+# SECONDS_PER_ETH1_BLOCK:
 
 # The lower the value is, the more percentage of validators can enter and exit
 CHURN_LIMIT_QUOTIENT: "32"

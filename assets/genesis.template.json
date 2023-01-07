@@ -12,11 +12,7 @@
     "berlinBlock": 0,
     "londonBlock": 0,
     "arrowGlacierBlock": 0,
-    "grayGlacierBlock": 0,
-    "clique": {
-      "period": 3,
-      "epoch": 30000
-    }
+    "grayGlacierBlock": 0
   },
   "difficulty": "1",
   "gasLimit": "30000000",

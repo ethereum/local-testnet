@@ -38,7 +38,7 @@ extra_data="0x$(zeroes 64)${address:2}$(zeroes 130)"
 genesis=$(echo $genesis | jq ". + { \"extradata\": \"$extra_data\" }")
 
 # Add the terminal total difficulty
-config=$(echo $genesis | jq ".config + { \"chainId\": "$NETWORK_ID", \"terminalTotalDifficulty\": "$TERMINAL_TOTAL_DIFFICULTY" }")
+config=$(echo $genesis | jq ".config + { \"chainId\": "$NETWORK_ID", \"terminalTotalDifficulty\": "$TERMINAL_TOTAL_DIFFICULTY", \"clique\": { \"period\": "$SECONDS_PER_ETH1_BLOCK", \"epoch\": 30000 } }")
 genesis=$(echo $genesis | jq ". + { \"config\": $config }")
 
 # Generate the genesis state
