@@ -84,7 +84,7 @@ The following logs are the significant ones.
 * *./data/node{id}/lighthouse/beacon_node.log* - which is the Lighthouse beacon_node log of the id'th node of the `NODE_COUNT` nodes.
 * *./data/node{id}/lighthouse/validator_client.log* - which is the Lighthouse validator_client log of the id'th node of the `NODE_COUNT` nodes.
 
-When the network has fully transitioned the Proof-of-Stake, the log in *./data/node{id}/lighthouse/beacon_node.log* should show the following.
+When the network has fully transitioned to the Proof-of-Stake, the log in *./data/node{id}/lighthouse/beacon_node.log* should show the following.
 
 ```
 Jan 06 10:09:53.501 INFO Synced                                  slot: 71, block: 0xfa3e…e9bb, epoch: 2, finalized_epoch: 0, finalized_root: 0x68ea…8fbd, exec_hash: n/a, peers: 3, service: slot_notifier
