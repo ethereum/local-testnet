@@ -44,6 +44,7 @@ By default, the number of nodes will be 4 and the number of validators will be 8
 ```bash
 NODE_COUNT=2 VALIDATOR_COUNT=10 ./runs.h
 ```
+Note: If you make the `NODE_COUNT` and `VALIDATOR_COUNT` too high, you probably need to change `TERMINAL_TOTAL_DIFFICULTY` and `GENESIS_DELAY` in `vars.env` as well. Please read the comment in `vars.env` for more detail.
 
 ## How the network works
 When you run `./run.sh`, the followings happen in order.
