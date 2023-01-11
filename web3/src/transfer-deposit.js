@@ -7,7 +7,7 @@ const Web3 = require('web3');
 
 const argv = yargs
     .option('endpoint', {
-        description: 'IPC endpoint to which you want to use to transfer the deposit',
+        description: 'IPC endpoint of the node which you want to use to transfer the deposit',
         type: 'string',
         demandOption: true,
         requiresArg: true,
