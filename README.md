@@ -11,16 +11,16 @@ JavaScript and web3.js so that we can easily manage JSON objects and interact wi
 ## Install Dependencies
 You can follow the follwing instructions to install the dependencies. You can omit some instructions if you prefer to install them in other ways.
 ```bash
-# Installing geth and bootnode
+# Install geth and bootnode
 sudo add-apt-repository -y ppa:ethereum/ethereum
 sudo apt-get update
-sudo apt-get install ethereum
+sudo apt-get install -y ethereum
 
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Install lighthouse and lcli
-sudo apt install -y git gcc g++ make cmake pkg-config llvm-dev libclang-dev clang protobuf-compiler
+sudo apt-get install -y git gcc g++ make cmake pkg-config llvm-dev libclang-dev clang protobuf-compiler
 git clone https://github.com/sigp/lighthouse.git
 cd lighthouse
 git checkout stable
@@ -28,10 +28,10 @@ make
 make install-lcli
 
 # Install Node.js
-sudo apt install nodejs npm
+sudo apt-get install -y nodejs npm
 
 # Install jq
-sudo apt install -y jq
+sudo apt-get install -y jq
 ```
 
 ## Run the network
@@ -42,7 +42,7 @@ cd local-testnet
 ```
 By default, the number of nodes will be 4 and the number of validators will be 80. You can change them by setting the environment variables.
 ```bash
-NODE_COUNT=2 VALIDATOR_COUNT=10 ./runs.h
+NODE_COUNT=2 VALIDATOR_COUNT=10 ./run.sh
 ```
 Note: If you make the `NODE_COUNT` and `VALIDATOR_COUNT` too high, you probably need to change `TERMINAL_TOTAL_DIFFICULTY` and `GENESIS_DELAY` in `vars.env` as well. Please read the comment in `vars.env` for more detail.
 
