@@ -47,6 +47,13 @@ NODE_COUNT=2 VALIDATOR_COUNT=10 ./run.sh
 ```
 Note: If you make the `NODE_COUNT` and `VALIDATOR_COUNT` too high, you probably need to change `TERMINAL_TOTAL_DIFFICULTY` and `GENESIS_DELAY` in `vars.env` as well. Please read the comment in `vars.env` for more detail.
 
+If you want to specify the paths for your own geth and lighthouse binaries, you can do so by setting `GETH_CMD` and `LIGHTHOUSE_CMD` environment variables.
+```bash
+GETH_CMD=~/repos/go-ethereum/build/bin/geth \
+LIGHTHOUSE_CMD=~/repos/lighthouse/target/release/lighthouse \
+./run.sh
+```
+
 ## How the network works
 When you run `./run.sh`, the followings happen in order.
 

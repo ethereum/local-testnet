@@ -14,7 +14,7 @@ echo "Started the lighthouse bootnode which is now listening at port $CL_BOOTNOD
 
 # --disable-packet-filter is necessary because it's involed in rate limiting and nodes per IP limit
 # See https://github.com/sigp/discv5/blob/v0.1.0/src/socket/filter/mod.rs#L149-L186
-lighthouse boot_node \
+$LIGHTHOUSE_CMD boot_node \
     --testnet-dir $CONSENSUS_DIR \
     --port $CL_BOOTNODE_PORT \
     --listen-address 127.0.0.1 \

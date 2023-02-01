@@ -21,7 +21,7 @@ echo "Started the lighthouse beacon node #$index which is now listening at port 
 
 # --disable-packet-filter is necessary because it's involed in rate limiting and nodes per IP limit
 # See https://github.com/sigp/discv5/blob/v0.1.0/src/socket/filter/mod.rs#L149-L186
-lighthouse beacon_node \
+$LIGHTHOUSE_CMD beacon_node \
     --datadir $datadir \
 	--testnet-dir $CONSENSUS_DIR \
     --execution-endpoint http://localhost:$(expr $BASE_EL_RPC_PORT + $index) \

@@ -16,7 +16,7 @@ address=$(cat $datadir/address)
 log_file=$datadir/geth.log
 
 echo "Started the geth node 'signer' which is now listening at port $SIGNER_PORT. You can see the log at $log_file"
-geth \
+$GETH_CMD \
     --datadir $datadir \
     --authrpc.port $SIGNER_RPC_PORT \
     --port $SIGNER_PORT \

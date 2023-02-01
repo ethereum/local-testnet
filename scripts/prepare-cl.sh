@@ -80,7 +80,7 @@ for (( node=1; node<=$NODE_COUNT; node++ )); do
     el_data_dir $node
     mkdir -p $cl_data_dir
     cp $el_data_dir/geth/jwtsecret $cl_data_dir
-    lighthouse \
+    $LIGHTHOUSE_CMD \
         --testnet-dir $CONSENSUS_DIR \
         account validator import \
         --directory $CONSENSUS_DIR/validator_keys/node$node \

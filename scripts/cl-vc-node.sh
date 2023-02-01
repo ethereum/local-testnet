@@ -18,7 +18,7 @@ log_file=$datadir/validator_client.log
 echo "Started the lighthouse validator client #$index. You can see the log at $log_file"
 
 # Send all the fee to the PoA signer
-lighthouse validator_client \
+$LIGHTHOUSE_CMD validator_client \
     --datadir $datadir \
 	--testnet-dir $CONSENSUS_DIR \
 	--init-slashing-protection \
