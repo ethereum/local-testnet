@@ -1,4 +1,7 @@
-# Local Ethereum Testnet
+# [DEPRECATED] Local Ethereum Testnet
+
+***This repo is depricated and no longer functions with updated mainnet clients***
+
 Run a full Ethereum network from genesis in the local machine. The network run by this projects uses [lighthouse](https://github.com/sigp/lighthouse)
 and [geth](https://github.com/ethereum/go-ethereum) as the consensus client and execution client respectively.
 
